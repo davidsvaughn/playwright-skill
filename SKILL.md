@@ -16,8 +16,8 @@ Verified against `@playwright/cli` 0.1.20 on 2026-09-16.
 - Browser sessions are machine-wide: every Claude Code session, subagent and terminal sees the same names, and `playwright-cli list` shows them all.
 - A command without `-s=<name>` targets a session literally named `default`, which you did not open, and fails with `The browser 'default' is not open`.
   `PLAYWRIGHT_CLI_SESSION` does not survive between Bash tool calls, so pass `-s` on every command.
-- Name the session after the repo plus the first 8 characters of your Claude Code session ID, so parallel sessions never share a browser.
-  Work the name out once, then use it literally:
+- Name the session after the project you are working on plus the first 8 characters of your Claude Code session ID, so parallel sessions never share a browser.
+  Work the name out once, from inside the project (if you run commands from a scratch directory, put the project's name in by hand), then use it literally:
 
   ```bash
   echo "$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")-${CLAUDE_CODE_SESSION_ID:0:8}"
@@ -46,6 +46,7 @@ playwright-cli -s=myapp-4ce59141 close
 
 - Never type, fill or script the user's credentials.
   When a site needs a login, open it `--headed`, ask the user to sign in in that window, and save the state once they say they are done.
+  Test accounts of a local or synthetic app, given to you in the task, are not the user's credentials and may be filled.
 - Profiles live in `~/.local/state/playwright-auth/<profile>.json`.
   They hold live session cookies: keep the directory at mode 700 and the files at 600, and never print, commit or upload them.
 - The project's CLAUDE.md names the profile it uses and says what a valid session looks like.
@@ -107,7 +108,8 @@ playwright-cli -s=<name> response-body 7
 ## 7. Files left behind
 
 - Every command writes to `.playwright-cli/` in the current directory: snapshots, console logs, screenshots, traces.
-  Traces and logs can contain session cookies, so run from the repo root or a scratch directory.
+  An explicit `--filename=<file>` is written relative to the current directory instead, so give it a path under `.playwright-cli/` or a scratch directory.
+  Traces and logs can contain session cookies and bearer tokens, so run from the repo root or a scratch directory.
   `.playwright-cli/` is in the global gitignore on this machine (`~/.gitignore`), so it never needs a per-repo entry.
 
 ## Upgrades
