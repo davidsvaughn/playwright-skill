@@ -5,7 +5,7 @@
 - `brief.md`: the subagent brief and what to check in its transcript.
 - `measure.sh`: the same flow scripted, timing and sizing each command; writes `test/out/measure.tsv`.
 
-## Head-to-head of 2026-09-16 (why the wrapper was retired)
+## Head-to-head of 2026-09-16: playwright-cli vs agent-browser
 
 `playwright-cli` 0.1.20 against `vercel-labs/agent-browser` 0.38.0 on this app; one fresh subagent per tool, same brief.
 
@@ -17,7 +17,7 @@
 | Snapshot of the 240-row page | 57 KB | 48 KB full, 35 KB with `-i` |
 | Size of the tool's agent guide | 15 KB | 37 KB (143 KB with `--full`) |
 
-- Neither agent needed the old wrapper: native `console`, `requests`, `request <n>`, `request-body`/`response-body` and `eval` covered the whole diagnosis.
+- Native `console`, `requests`, `request <n>`, `request-body`/`response-body` and `eval` covered the whole diagnosis; no helper scripts were needed.
 - `playwright-cli` friction: its official skill never mentions `request-body`/`response-body`/`requests --static`; the snapshot printed after `fill --submit` caught a loading screen; `--raw eval` returns strings JSON-encoded.
   All three are covered in `SKILL.md`.
 - `agent-browser` friction: plain-text `errors` prints a bare `✗` with no message (upstream issue #1692, open in 0.38.0) and plain `network request <id>` prints only the URL, so the evidence only shows with `--json`; uncaught exceptions appear under `errors`, not `console`; `snapshot --delta` fell back to a full snapshot after the filter re-rendered the table.
