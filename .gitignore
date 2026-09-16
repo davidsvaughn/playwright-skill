@@ -1,0 +1,8 @@
+# playwright-cli output (snapshots, console logs, screenshots, traces): may contain session cookies
+.playwright-cli/
+.playwright/
+
+# test harness output
+test/out/
+
+.notes/
